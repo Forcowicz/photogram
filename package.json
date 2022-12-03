@@ -4,17 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon server.js"
   },
   "repository": {
     "type": "git",
-    "url": "photogram"
+    "url": "https://github.com/Forcowicz/photogram"
   },
   "author": "Marek Żywar, Kacper Żuławski",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "mongoose": "^6.7.5"
+    "mongoose": "^6.7.5",
+    "morgan": "^1.10.0"
   }
 }
