@@ -54,7 +54,7 @@ exports.updateOne = catchAsync(async (req, res, next) => {
 
   const data = { description: req.body.description };
 
-  if (Object.values(data)[0] === "") return next(new AppError(400, "You can only edit post's description."));
+  if (!req.body.description) return next(new AppError(400, "You can only edit post's description."));
 
   const post = await Post.findByIdAndUpdate(id, data, { new: true });
 
