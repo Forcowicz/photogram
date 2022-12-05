@@ -10,12 +10,13 @@ const postSchema = new mongoose.Schema(
     description: String
   },
   {
-    toJSON: true,
-    toObject: true,
-    timestamps: true
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+    timestamps: true,
+    id: false
   }
 );
 
-const Post = mongoose.model("Post", postSchema);
+const Post = new mongoose.model("Post", postSchema);
 
 module.exports = Post;

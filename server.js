@@ -2,7 +2,7 @@ const app = require("./app");
 const mongoose = require("mongoose");
 
 const DB = process.env.DB_STRING.replace("<password>", process.env.DB_PASS);
-mongoose.connect(DB).then((conn) => {
+mongoose.connect(DB, { useNewUrlParser: true }).then((conn) => {
   console.log("Database connection successful as fuck!");
 });
 

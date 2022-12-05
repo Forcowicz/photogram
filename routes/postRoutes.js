@@ -3,6 +3,6 @@ const postController = require("../controllers/postController");
 
 const router = express.Router();
 
-router.route("/").get(postController.getAll);
+router.route("/").post(postController.createOne);
 
 module.exports = router;
