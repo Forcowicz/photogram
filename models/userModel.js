@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -27,8 +28,45 @@ const userSchema = new mongoose.Schema({
       },
       message: "Passwords do not match!"
     }
+  },
+  phoneNumber: {
+    type: String,
+    validate: {
+      validator: function (val) {
+        return this.phoneNumber.length === 9;
+      }
+    },
+    message: "Please provide a valid phone number."
+  },
+  active: {
+    type: Boolean,
+    default: true
+  },
+  role: {
+    type: String,
+    enum: ["user", "business", "mod", "admin"],
+    default: "user"
   }
 });
+
+// TODO: Add phone number validation
+
+// Hooks
+
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+
+  this.password = await bcrypt.hash(this.password, 12);
+  this.passwordConfirm = undefined;
+
+  next();
+});
+
+// Schema methods
+
+userSchema.methods.correctPassword = async function (passwordToValidate, userPassword) {
+  return await bcrypt.compare(passwordToValidate, userPassword);
+};
 
 const User = new mongoose.model("User", userSchema);
 
