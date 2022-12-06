@@ -1,5 +1,6 @@
 const express = require("express");
 const morgan = require("morgan");
+const cookieParser = require("cookie-parser");
 require("dotenv").config({ path: `${__dirname}/config.env` });
 const globalErrorHandler = require("./controllers/errorController");
 const userRouter = require("./routes/userRoutes");
@@ -12,6 +13,7 @@ app.use(morgan("dev"));
 // Config
 
 app.use(express.json({ limit: "10kb" }));
+app.use(cookieParser());
 
 // Routing
 

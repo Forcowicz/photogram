@@ -1,3 +1,4 @@
+const { promisify } = require("util");
 const jwt = require("jsonwebtoken");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/AppError");
@@ -29,6 +30,32 @@ const createSendJWT = (user, statusCode, res) => {
     }
   });
 };
+
+exports.protect = catchAsync(async (req, res, next) => {
+  const token = req.cookies.jwt;
+
+  if (!token) return next(new AppError(401, "You need to be logged in to access this resource."));
+
+  const decodedToken = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+
+  ///
+
+  const currentUser = await User.findById(decodedToken.userId);
+
+  if (!currentUser) return next(new AppError(404, "Your account has been deleted."));
+
+  req.user = currentUser;
+
+  next();
+});
+
+exports.restrictTo =
+  (...roles) =>
+  (req, res, next) => {
+    if (roles.includes(req.user.role)) return next();
+
+    return next(new AppError(403, "You don't have access to this resource."));
+  };
 
 exports.signUp = catchAsync(async (req, res, next) => {
   const data = {

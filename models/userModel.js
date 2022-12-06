@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     validate: {
       validator: function (val) {
-        return this.phoneNumber.length === 9;
+        return val.length === 9;
       }
     },
     message: "Please provide a valid phone number."
