@@ -6,8 +6,18 @@ const postSchema = new mongoose.Schema(
       type: String,
       required: [true, "Your post must contain an image!"]
     },
-    authorId: String,
-    description: String
+    authorId: {
+      type: mongoose.Schema.ObjectId,
+      ref: "User"
+    },
+    description: {
+      type: String,
+      maxlength: [280, "Post description is too long!"]
+    },
+    archived: {
+      type: Boolean,
+      default: false
+    }
   },
   {
     toJSON: { virtuals: true },
