@@ -9,6 +9,7 @@ router.use(authController.protect);
 router.route("/").get(postController.getAll).post(postController.createOne);
 router.route("/:id").get(postController.getOne).delete(postController.deleteOne).patch(postController.updateOne);
 
-router.patch("/saveOrUnsavePost/:id", postController.saveOrUnsavePost);
+router.patch("/savePost/:id", postController.savePost);
+router.patch("/unsavePost/:id", postController.unsavePost);
 
 module.exports = router;

@@ -21,35 +21,29 @@ exports.createOne = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.saveOrUnsavePost = catchAsync(async (req, res, next) => {
+exports.savePost = catchAsync(async (req, res, next) => {
   const postId = req.params.id;
 
   const post = await Post.findById(postId);
 
   if (!post) return next(new AppError(404, `Couldn't find post with this ID: ${postId}`));
 
-  const user = await User.findById(req.user._id);
-
-  let message;
-
-  if (user.savedPosts.includes(postId)) {
-    user.savedPosts.splice(user.savedPosts.indexOf(postId), 1);
-
-    message = "Post has been removed from collection.";
-  } else {
-    user.savedPosts.push(postId);
-
-    message = "Post has been saved to collection.";
-  }
-
-  await user.save({ validateBeforeSave: false });
+  await User.findByIdAndUpdate(req.user._id, { $push: { savedPosts, postId } });
 
   res.status(200).json({
     status: "success",
-    message,
-    data: {
-      post
-    }
+    message: "Post has been saved to your collection."
+  });
+});
+
+exports.unsavePost = catchAsync(async (req, res, next) => {
+  const postId = req.params.id;
+
+  await User.findByIdAndUpdate(req.user._id, { $pull: { savedPosts, postId } });
+
+  res.status(200).json({
+    status: "success",
+    message: "Post has been removed from your collection."
   });
 });
 
