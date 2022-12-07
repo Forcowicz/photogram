@@ -50,7 +50,8 @@ const userSchema = new mongoose.Schema({
   private: {
     type: Boolean,
     default: false
-  }
+  },
+  savedPosts: [mongoose.Schema.ObjectId]
 });
 
 // TODO: Add phone number validation
