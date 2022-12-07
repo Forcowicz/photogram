@@ -28,18 +28,23 @@ exports.savePost = catchAsync(async (req, res, next) => {
 
   if (!post) return next(new AppError(404, `Couldn't find post with this ID: ${postId}`));
 
-  await User.findByIdAndUpdate(req.user._id, { $push: { savedPosts, postId } });
+  await User.findByIdAndUpdate(req.user._id, { $push: { savedPosts: postId } });
 
   res.status(200).json({
     status: "success",
-    message: "Post has been saved to your collection."
+    message: "Post has been saved to your collection.",
+    data: {
+      post
+    }
   });
 });
+
+// TODO: Make sure user can't save the same post twice
 
 exports.unsavePost = catchAsync(async (req, res, next) => {
   const postId = req.params.id;
 
-  await User.findByIdAndUpdate(req.user._id, { $pull: { savedPosts, postId } });
+  await User.findByIdAndUpdate(req.user._id, { $pull: { savedPosts: postId } });
 
   res.status(200).json({
     status: "success",
