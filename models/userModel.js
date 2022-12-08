@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+const { phone } = require("phone");
+const validator = require("validator");
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -11,7 +13,13 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please provide your email!"],
     unique: [true, "This email has been already taken!"],
-    lowercase: true
+    lowercase: true,
+    validate: {
+      validator: function (val) {
+        return validator.isEmail(val);
+      },
+      message: "Please enter a valid email address."
+    }
   },
   password: {
     type: String,
@@ -33,10 +41,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     validate: {
       validator: function (val) {
-        return val.length === 9;
-      }
-    },
-    message: "Please provide a valid phone number."
+        return phone(val, { country: "PL" }).isValid;
+      },
+      message: "Please provide a valid phone number."
+    }
   },
   active: {
     type: Boolean,
@@ -51,7 +59,10 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
-  savedPosts: [mongoose.Schema.ObjectId]
+  savedPosts: {
+    type: mongoose.Schema.ObjectId,
+    select: false
+  }
 });
 
 // TODO: Add phone number validation
@@ -63,6 +74,12 @@ userSchema.pre("save", async function (next) {
 
   this.password = await bcrypt.hash(this.password, 12);
   this.passwordConfirm = undefined;
+
+  next();
+});
+
+userSchema.pre("save", function (next) {
+  this.phoneNumber = phone(this.phoneNumber).phoneNumber;
 
   next();
 });

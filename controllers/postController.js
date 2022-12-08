@@ -35,7 +35,7 @@ exports.unsavePost = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getAll = handlerFactory.getAll(Post);
+exports.getAll = handlerFactory.getAll(Post, { populate: { path: "authorId", select: "username _id email" } });
 exports.getOne = handlerFactory.getOne(Post);
 exports.createOne = handlerFactory.createOne(Post, {
   allowedFields: ["description", "imageUrl"],

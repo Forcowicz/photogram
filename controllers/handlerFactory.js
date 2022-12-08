@@ -1,11 +1,18 @@
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/AppError");
+const APIFeatures = require("../utils/APIFeatures");
 
 const getCollectonName = (Model) => Model.collection.collectionName.slice(0, -1);
 
-exports.getAll = (Model) =>
+exports.getAll = (Model, options) =>
   catchAsync(async (req, res, next) => {
-    const entities = await Model.find();
+    let query = Model.find({});
+
+    if (options.populate) {
+      query = query.populate(options.populate);
+    }
+
+    const entities = await query;
 
     res.status(200).json({
       status: "success",
