@@ -6,8 +6,6 @@ const User = require("../models/userModel");
 exports.follow = catchAsync(async (req, res, next) => {
   const userId = req.params.id;
 
-  console.log(userId, req.user.id);
-
   if (userId === req.user.id) return next(new AppError(400, "You cannot follow yourself."));
 
   const user = await User.findById(userId);

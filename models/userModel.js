@@ -65,11 +65,13 @@ const userSchema = new mongoose.Schema(
       select: false
     },
     followers: {
-      type: [mongoose.Schema.ObjectId]
+      type: [mongoose.Schema.ObjectId],
+      ref: "User"
       // select: false
     },
     following: {
-      type: [mongoose.Schema.ObjectId]
+      type: [mongoose.Schema.ObjectId],
+      ref: "User"
       // select: false
     }
   },
@@ -108,11 +110,11 @@ userSchema.methods.correctPassword = async function (passwordToValidate, userPas
 // Virtuals
 
 userSchema.virtual("followerCount").get(function () {
-  return this.followers.length;
+  return this.followers?.length;
 });
 
 userSchema.virtual("followingCount").get(function () {
-  return this.following.length;
+  return this.following?.length;
 });
 
 const User = new mongoose.model("User", userSchema);

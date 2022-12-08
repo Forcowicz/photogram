@@ -17,15 +17,25 @@ const postSchema = new mongoose.Schema(
     archived: {
       type: Boolean,
       default: false
+    },
+    likes: {
+      type: [mongoose.Schema.ObjectId],
+      ref: "User"
+      // select: false
     }
   },
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-    timestamps: true,
-    id: false
+    timestamps: true
   }
 );
+
+// Virtuals
+
+postSchema.virtual("likeCount").get(function () {
+  return this.likes?.length;
+});
 
 const Post = new mongoose.model("Post", postSchema);
 

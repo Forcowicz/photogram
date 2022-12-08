@@ -4,7 +4,7 @@ const APIFeatures = require("../utils/APIFeatures");
 
 const getCollectonName = (Model) => Model.collection.collectionName.slice(0, -1);
 
-exports.getAll = (Model, options) =>
+exports.getAll = (Model, options = {}) =>
   catchAsync(async (req, res, next) => {
     let query = Model.find({});
 

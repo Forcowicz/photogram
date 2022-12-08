@@ -35,6 +35,35 @@ exports.unsavePost = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.likePost = catchAsync(async (req, res, next) => {
+  const postId = req.params.id;
+  const userId = req.user.id;
+
+  const post = await Post.findById(postId);
+
+  if (!post) return next(new AppError(404, "This post doesn't exist."));
+
+  post.likes.push(userId);
+  await post.save({ validateBeforeSave: false });
+
+  res.status(200).json({
+    status: "success",
+    message: "You liked this post."
+  });
+});
+
+exports.dislikePost = catchAsync(async (req, res, next) => {
+  const postId = req.params.id;
+  const userId = req.user.id;
+
+  await Post.findByIdAndUpdate(postId, { $pull: { likes: userId } });
+
+  res.status(200).json({
+    status: "success",
+    message: "You disliked this post."
+  });
+});
+
 exports.getAll = handlerFactory.getAll(Post, { populate: { path: "authorId", select: "username _id email" } });
 exports.getOne = handlerFactory.getOne(Post);
 exports.createOne = handlerFactory.createOne(Post, {
