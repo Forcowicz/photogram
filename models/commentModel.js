@@ -7,20 +7,34 @@ const commentSchema = new mongoose.Schema(
       required: [true, "Please provide some text for the comment."],
       maxlength: [240, "Your comment is too long."]
     },
-    postId: String,
-    authorId: {
+    postId: {
       type: mongoose.Schema.ObjectId,
       ref: "Post"
+    },
+    authorId: {
+      type: mongoose.Schema.ObjectId,
+      ref: "User"
     },
     commentId: {
       type: mongoose.Schema.ObjectId,
       ref: "Comment",
-      default: null
+      validate: {
+        validator: function (val) {
+          return val && this.type === "reply";
+        },
+        message: "This comment is not a reply, you cannot reference another comment here."
+      }
     },
     type: {
       type: String,
       enum: ["regular", "reply"],
-      default: "regular"
+      default: "regular",
+      validate: {
+        validator: function () {
+          return this.commentId !== undefined;
+        },
+        message: "Please provide comment ID reference."
+      }
     }
   },
   {
@@ -29,6 +43,8 @@ const commentSchema = new mongoose.Schema(
     timestamps: true
   }
 );
+
+// TODO: Check if referenced comments exist
 
 const Comment = new mongoose.model("Comment", commentSchema);
 

@@ -9,7 +9,12 @@ router.post("/login", authController.login);
 
 router.use(authController.protect, authController.restrictTo("mod", "admin"));
 
-router.route("/").get(userController.getAll);
+router.get("/", userController.getAll);
 router.route("/:id").get(userController.getOne).delete(userController.deleteOne);
+
+router.use(authController.restrictTo("admin"));
+
+router.route("/").post(userController.createOne);
+router.route("/:id").patch(userController.updateOne);
 
 module.exports = router;

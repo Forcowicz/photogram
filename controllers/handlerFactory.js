@@ -30,9 +30,21 @@ exports.getOne = (Model) =>
     });
   });
 
-exports.createOne = (Model) =>
+exports.createOne = (Model, options = {}) =>
   catchAsync(async (req, res, next) => {
-    const entity = await Model.create(req.body);
+    let data = options.allowedFields ? {} : req.body;
+
+    if (options.allowedFields) {
+      for (const [key, val] of Object.entries(req.body)) {
+        if (options.allowedFields.includes(key)) data[key] = val;
+      }
+    }
+
+    if (options.authorField) {
+      data[options.authorField] = req.user._id;
+    }
+
+    const entity = await Model.create(data);
 
     res.status(201).json({
       status: "success",
@@ -54,14 +66,16 @@ exports.deleteOne = (Model) =>
     });
   });
 
-exports.updateOne = (Model, allowedProperties = []) =>
+exports.updateOne = (Model, options = {}) =>
   catchAsync(async (req, res, next) => {
     const id = req.params.id;
 
-    let filteredData = {};
+    let filteredData = options.allowedFields ? {} : req.body;
 
-    for (const [key, value] of Object.entries(req.body)) {
-      if (allowedProperties.includes(key)) filteredData[key] = value;
+    if (options.allowedFields) {
+      for (const [key, value] of Object.entries(req.body)) {
+        if (options.allowedFields.includes(key)) filteredData[key] = value;
+      }
     }
 
     if (Object.keys(filteredData).length === 0)
