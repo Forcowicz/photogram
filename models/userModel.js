@@ -10,6 +10,15 @@ const userSchema = new mongoose.Schema(
       required: [true, "Please provide your username!"],
       unique: [true, "This username has been already taken!"]
     },
+    name: {
+      type: String,
+      required: [true, "Please provide a name for your profile."]
+    },
+    activityType: {
+      type: String,
+      minlength: [3, "Your activity type name is too short."],
+      minlength: [32, "Your activity type name is too long."]
+    },
     email: {
       type: String,
       required: [true, "Please provide your email!"],
@@ -38,6 +47,10 @@ const userSchema = new mongoose.Schema(
         message: "Passwords do not match!"
       }
     },
+    imageUrl: {
+      type: String,
+      default: "image.jpg"
+    },
     phoneNumber: {
       type: String,
       validate: {
@@ -61,8 +74,9 @@ const userSchema = new mongoose.Schema(
       default: false
     },
     savedPosts: {
-      type: mongoose.Schema.ObjectId,
-      select: false
+      type: [mongoose.Schema.ObjectId],
+      ref: "Post"
+      // select: false
     },
     followers: {
       type: [mongoose.Schema.ObjectId],
