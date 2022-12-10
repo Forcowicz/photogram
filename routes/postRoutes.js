@@ -15,4 +15,7 @@ router.patch("/unsavePost/:id", postController.unsavePost);
 router.patch("/like/:id", postController.likePost);
 router.patch("/dislike/:id", postController.dislikePost);
 
+router.patch("/tagUsers/:id", postController.tagUsers);
+router.patch("/untagUsers/:id", postController.untagUsers);
+
 module.exports = router;

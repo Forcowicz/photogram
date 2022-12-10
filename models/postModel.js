@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const postSchema = new mongoose.Schema(
   {
     imageUrl: {
-      type: String,
+      type: [String],
       required: [true, "Your post must contain an image!"]
     },
     authorId: {
@@ -22,6 +22,11 @@ const postSchema = new mongoose.Schema(
       type: [mongoose.Schema.ObjectId],
       ref: "User"
       // select: false
+    },
+    tagged: {
+      type: [mongoose.Schema.ObjectId],
+      ref: "User"
+      // select: false
     }
   },
   {
@@ -34,7 +39,11 @@ const postSchema = new mongoose.Schema(
 // Virtuals
 
 postSchema.virtual("likeCount").get(function () {
-  return this.likes?.length;
+  return this.likes?.length || 0;
+});
+
+postSchema.virtual("taggedCount").get(function () {
+  return this.tagged?.length || 0;
 });
 
 const Post = new mongoose.model("Post", postSchema);

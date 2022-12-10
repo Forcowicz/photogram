@@ -64,6 +64,37 @@ exports.dislikePost = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.tagUsers = catchAsync(async (req, res, next) => {
+  const postId = req.params.id;
+  const usersToTag = req.body.users;
+
+  const taggedUserIds = Array.isArray(usersToTag) ? usersToTag : [usersToTag];
+
+  const userCheckPromises = taggedUserIds.map((id) => User.exists({ id }));
+  await Promise.all(userCheckPromises);
+
+  await Post.findByIdAndUpdate(postId, { $addToSet: { tagged: { $each: taggedUserIds } } });
+
+  res.status(200).json({
+    status: "success",
+    message: `You tagged users: ${taggedUserIds}`
+  });
+});
+
+exports.untagUsers = catchAsync(async (req, res, next) => {
+  const postId = req.params.id;
+  const usersToUntag = req.body.users;
+
+  const taggedUserIds = Array.isArray(usersToUntag) ? usersToUntag : [usersToUntag];
+
+  await Post.findByIdAndUpdate(postId, { $pull: { tagged: { $in: taggedUserIds } } });
+
+  res.status(200).json({
+    status: "success",
+    message: `You've untagged users ${taggedUserIds} from post ${postId}`
+  });
+});
+
 exports.getAll = handlerFactory.getAll(Post, { populate: { path: "authorId", select: "username _id email" } });
 exports.getOne = handlerFactory.getOne(Post);
 exports.createOne = handlerFactory.createOne(Post, {
