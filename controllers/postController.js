@@ -3,6 +3,7 @@ const handlerFactory = require("./handlerFactory");
 const AppError = require("../utils/AppError");
 const Post = require("../models/postModel");
 const User = require("../models/userModel");
+const Comment = require("../models/commentModel");
 
 exports.savePost = catchAsync(async (req, res, next) => {
   const postId = req.params.id;
@@ -97,6 +98,34 @@ exports.untagUsers = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     message: `You've untagged users ${taggedUserIds} from post ${postId}`
+  });
+});
+
+exports.getLikes = catchAsync(async (req, res, next) => {
+  const postId = req.params.id;
+
+  const post = await Post.findById(postId).populate("likes").select({ likes: 1 });
+
+  likes = post.likes;
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      likes
+    }
+  });
+});
+
+exports.getComments = catchAsync(async (req, res, next) => {
+  const postId = req.params.id;
+
+  const comments = await Comment.find({ postId });
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      comments
+    }
   });
 });
 
