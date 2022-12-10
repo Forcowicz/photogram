@@ -68,10 +68,13 @@ exports.tagUsers = catchAsync(async (req, res, next) => {
   const postId = req.params.id;
   const usersToTag = req.body.users;
 
+  if (!usersToTag || usersToTag.length === 0) return next(new AppError(400, "Please provide users to tag."));
+
   const taggedUserIds = Array.isArray(usersToTag) ? usersToTag : [usersToTag];
 
-  const userCheckPromises = taggedUserIds.map((id) => User.exists({ id }));
-  await Promise.all(userCheckPromises);
+  const userCheckPromises = taggedUserIds.map((id) => User.exists({ _id: id }));
+  const result = await Promise.all(userCheckPromises);
+  if (result.some((el) => !el)) return next(new AppError(404, "Some users have not been found in the database."));
 
   await Post.findByIdAndUpdate(postId, { $addToSet: { tagged: { $each: taggedUserIds } } });
 
@@ -84,6 +87,8 @@ exports.tagUsers = catchAsync(async (req, res, next) => {
 exports.untagUsers = catchAsync(async (req, res, next) => {
   const postId = req.params.id;
   const usersToUntag = req.body.users;
+
+  if (!usersToUntag || usersToUntag.length === 0) return next(new AppError(400, "Please provide users to untag."));
 
   const taggedUserIds = Array.isArray(usersToUntag) ? usersToUntag : [usersToUntag];
 
