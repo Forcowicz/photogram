@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 const DB = process.env.DB_STRING.replace("<password>", process.env.DB_PASS);
 mongoose.connect(DB, { useNewUrlParser: true }).then((conn) => {
-  console.log("Database connection successful as fuck!");
+  console.log("Database connection successful!");
 });
 
 const PORT = process.env.PORT || 3000;

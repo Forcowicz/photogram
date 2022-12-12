@@ -7,6 +7,10 @@ const commentSchema = new mongoose.Schema(
       required: [true, "Please provide some text for the comment."],
       maxlength: [240, "Your comment is too long."]
     },
+    likes: {
+      type: [mongoose.Schema.ObjectId],
+      ref: "User"
+    },
     postId: {
       type: mongoose.Schema.ObjectId,
       ref: "Post"
@@ -43,6 +47,12 @@ const commentSchema = new mongoose.Schema(
     timestamps: true
   }
 );
+
+// Virtuals
+
+commentSchema.virtual("likeCount").get(function () {
+  return this.likeCount?.length || 0;
+});
 
 // TODO: Check if referenced comments exist
 
