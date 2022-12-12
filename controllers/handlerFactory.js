@@ -23,11 +23,17 @@ exports.getAll = (Model, options = {}) =>
     });
   });
 
-exports.getOne = (Model) =>
+exports.getOne = (Model, options = {}) =>
   catchAsync(async (req, res, next) => {
     const id = req.params.id;
 
-    const entity = await Model.findById(id);
+    let query = Model.findById(id);
+
+    if (options.populate) {
+      query = query.populate(options.populate);
+    }
+
+    const entity = await query;
 
     res.status(200).json({
       status: "success",
