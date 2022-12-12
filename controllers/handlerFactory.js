@@ -1,3 +1,4 @@
+const escapeStringRegexp = require("escape-string-regexp");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/AppError");
 const APIFeatures = require("../utils/APIFeatures");
@@ -10,6 +11,19 @@ exports.getAll = (Model, options = {}) =>
 
     if (options.populate) {
       query = query.populate(options.populate);
+    }
+
+    if (req.query.search) {
+      query = query.find({
+        $or: [
+          { username: new RegExp(`^${req.query.search}`, "gi") },
+          { name: new RegExp(`^${req.query.search}`, "gi") }
+        ]
+      });
+    }
+
+    if (req.query.fields) {
+      query = query.select(req.query.fields.replaceAll(",", " "));
     }
 
     const entities = await query;
