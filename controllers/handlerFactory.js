@@ -1,4 +1,3 @@
-const escapeStringRegexp = require("escape-string-regexp");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/AppError");
 const APIFeatures = require("../utils/APIFeatures");
