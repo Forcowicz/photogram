@@ -129,7 +129,7 @@ exports.getComments = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getAll = handlerFactory.getAll(Post, { populate: { path: "authorId", select: "username _id email" } });
+exports.getAll = handlerFactory.getAll(Post, { populate: { path: "authorId" }, searchField: "name" });
 exports.getOne = handlerFactory.getOne(Post);
 exports.createOne = handlerFactory.createOne(Post, {
   allowedFields: ["description", "imageUrl", "tagged"],

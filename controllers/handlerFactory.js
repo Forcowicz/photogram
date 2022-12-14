@@ -6,23 +6,10 @@ const getCollectonName = (Model) => Model.collection.collectionName.slice(0, -1)
 
 exports.getAll = (Model, options = {}) =>
   catchAsync(async (req, res, next) => {
-    let query = Model.find({});
+    let { query } = new APIFeatures(Model.find(), req.query).search(options.searchField).limit().select();
 
     if (options.populate) {
       query = query.populate(options.populate);
-    }
-
-    if (req.query.search) {
-      query = query.find({
-        $or: [
-          { username: new RegExp(`^${req.query.search}`, "gi") },
-          { name: new RegExp(`^${req.query.search}`, "gi") }
-        ]
-      });
-    }
-
-    if (req.query.fields) {
-      query = query.select(req.query.fields.replaceAll(",", " "));
     }
 
     const entities = await query;

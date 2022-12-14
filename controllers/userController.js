@@ -90,7 +90,7 @@ exports.getSavedPosts = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getAll = handlerFactory.getAll(User);
+exports.getAll = handlerFactory.getAll(User, { searchField: "username" });
 exports.getOne = handlerFactory.getOne(User);
 exports.createOne = handlerFactory.createOne(User);
 exports.updateOne = handlerFactory.updateOne(User);

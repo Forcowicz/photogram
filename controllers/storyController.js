@@ -26,5 +26,5 @@ exports.deleteOne = handlerFactory.deleteOne(Story);
 
 // Only for mod, admin
 
-exports.getAll = handlerFactory.getAll(Story, { populate: { path: "author", select: "username email" } });
+exports.getAll = handlerFactory.getAll(Story, { populate: { path: "author" }, searchField: "mediaSrc" });
 exports.updateOne = handlerFactory.updateOne(Story);
