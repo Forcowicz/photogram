@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon server.js",
+    "watch:scss": "sass -w ./scss/main.scss ./public/css/style.css",
     "prod": "node server.js"
   },
   "repository": {
@@ -22,6 +23,7 @@
     "mongoose": "^6.7.5",
     "morgan": "^1.10.0",
     "phone": "^3.1.31",
+    "pug": "^3.0.2",
     "validator": "^13.7.0"
   }
 }

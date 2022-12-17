@@ -1,0 +1,21 @@
+.btn-text,
+.btn-text:link,
+.btn-text:visited {
+  font-size: $fs-regular;
+  font-weight: 600;
+  color: $c-accent;
+  text-transform: capitalize;
+
+  background: unset;
+
+  cursor: pointer;
+  border: none;
+
+  &:active {
+    opacity: 0.5;
+  }
+
+  &:disabled {
+    cursor: default;
+  }
+}

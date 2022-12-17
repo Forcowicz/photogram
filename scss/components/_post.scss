@@ -1,0 +1,120 @@
+.post {
+  display: grid;
+  grid-template-rows: max-content 48rem repeat(3, max-content);
+
+  border-radius: 9px;
+  border: 1px solid $c-grey-light;
+
+  &__header {
+    display: grid;
+    grid-template-columns: min-content max-content 1fr min-content;
+    align-items: center;
+    gap: 1rem;
+
+    padding: 1.2rem;
+  }
+
+  &__author-img {
+    height: 3.4rem;
+    width: 3.4rem;
+
+    border-radius: 50%;
+    border: 1px solid $c-grey-light;
+  }
+
+  &__author-name {
+    font-size: $fs-regular;
+    font-weight: 600;
+  }
+
+  &__options {
+    grid-column: 4 / -1;
+  }
+
+  &__image {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+  }
+
+  &__actions {
+    display: grid;
+    grid-template-columns: repeat(3, min-content) 1fr min-content;
+    gap: 1.7rem;
+    align-items: center;
+
+    padding: 1.2rem 1.5rem;
+  }
+
+  &__action:last-child {
+    grid-column: 5 / -1;
+  }
+
+  &__icon {
+    width: 2.5rem;
+    height: 2.5rem;
+
+    fill: $c-black;
+
+    cursor: pointer;
+
+    &:active {
+      opacity: 0.5;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+
+    padding: 0 1.5rem 1.5rem 1.5rem;
+  }
+
+  &__likes {
+    font-weight: 600;
+  }
+
+  &__description {
+  }
+
+  &__view-comments {
+    color: $c-grey;
+  }
+
+  &__date {
+    color: $c-grey;
+    font-size: $fs-xsmall;
+    text-transform: uppercase;
+  }
+
+  &__comment {
+    display: grid;
+    grid-template-columns: min-content minmax(18rem, 1fr) min-content;
+    gap: 1.5rem;
+    align-items: center;
+
+    padding: 1.5rem;
+
+    border-top: 1px solid $c-grey-light;
+  }
+
+  &__input {
+    font-family: inherit;
+    font-size: $fs-regular;
+    color: $c-black;
+
+    border: none;
+
+    &:focus {
+      outline: none;
+    }
+
+    &::placeholder {
+      color: $c-grey;
+    }
+  }
+}

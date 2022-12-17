@@ -1,0 +1,14 @@
+.main-container {
+  display: grid;
+  grid-template-columns: [nav-start] 36rem [nav-end] 1fr [content-start] 52rem [content-end aside-start] 36rem [aside-end] 1fr;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8rem;
+
+  grid-column: content-start / content-end;
+
+  padding: 2rem 0;
+}

@@ -1,0 +1,31 @@
+extends includes/_base
+
+block content
+  each post in posts
+    .post
+      .post__header 
+        img.post__author-img(src='/img/users/profile-pic.jpg' alt='User profile picture')
+        span.post__author-name= post.authorId.username
+        svg.post__icon.post__options
+          use(xlink:href="/icons/bootstrap-icons.svg#three-dots")
+      img.post__image(src="/img/posts/sample.jpg" alt="")
+      .post__actions
+        svg.post__icon.post__action(class='bi')
+          use(xlink:href="/icons/bootstrap-icons.svg#heart")
+        svg.post__icon.post__action(class='bi')
+          use(xlink:href="/icons/bootstrap-icons.svg#chat")
+        svg.post__icon.post__action(class='bi')
+          use(xlink:href="/icons/bootstrap-icons.svg#send")
+
+        svg.post__icon.post__action(class='bi')
+          use(xlink:href="/icons/bootstrap-icons.svg#bookmark")
+      .post__content
+        .post__likes= `${post.likeCount} likes`
+        .post__description !{`<a href='#' class='link'>${post.authorId.username}</a> ${post.description}`}  
+        .post__view-comments View all comments
+        .post__date= new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric' }).format(post.createdAt)
+      .post__comment
+        svg.post__icon
+          use(xlink:href="/icons/bootstrap-icons.svg#emoji-smile")
+        input.post__input(type="text" placeholder="Write a comment...")
+        button.btn-text(type='button') Post
