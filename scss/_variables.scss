@@ -15,4 +15,5 @@ $c-white: #fafafa;
 $c-black: #262626;
 $c-grey: #8e8e8e;
 $c-grey-light: #c7c7c7;
+$c-grey-xlight: lighten($c-grey-light, 15%);
 $c-accent: #0095f6;

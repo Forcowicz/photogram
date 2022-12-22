@@ -19,6 +19,8 @@ router.patch("/tagUsers/:id", postController.tagUsers);
 router.patch("/untagUsers/:id", postController.untagUsers);
 
 router.get("/:id/likes", postController.getLikes);
-router.get("/:id/comments", postController.getComments);
+router.route("/:id/comments").get(postController.getComments).post(postController.addComment);
+
+router.post("/:postId/comments/:commentId", postController.removeComment);
 
 module.exports = router;

@@ -18,28 +18,28 @@ const commentSchema = new mongoose.Schema(
     authorId: {
       type: mongoose.Schema.ObjectId,
       ref: "User"
-    },
-    commentId: {
-      type: mongoose.Schema.ObjectId,
-      ref: "Comment",
-      validate: {
-        validator: function (val) {
-          return val && this.type === "reply";
-        },
-        message: "This comment is not a reply, you cannot reference another comment here."
-      }
-    },
-    type: {
-      type: String,
-      enum: ["regular", "reply"],
-      default: "regular",
-      validate: {
-        validator: function () {
-          return this.commentId !== undefined;
-        },
-        message: "Please provide comment ID reference."
-      }
     }
+    // commentId: {
+    //   type: mongoose.Schema.ObjectId,
+    //   ref: "Comment",
+    //   validate: {
+    //     validator: function (val) {
+    //       return val && this.type === "reply";
+    //     },
+    //     message: "This comment is not a reply, you cannot reference another comment here."
+    //   }
+    // },
+    // type: {
+    //   type: String,
+    //   enum: ["regular", "reply"],
+    //   default: "regular",
+    //   validate: {
+    //     validator: function () {
+    //       return this.commentId !== undefined;
+    //     },
+    //     message: "Please provide comment ID reference."
+    //   }
+    // }
   },
   {
     toObject: { virtuals: true },
@@ -51,7 +51,7 @@ const commentSchema = new mongoose.Schema(
 // Virtuals
 
 commentSchema.virtual("likeCount").get(function () {
-  return this.likeCount?.length || 0;
+  return this.likes?.length || 0;
 });
 
 // TODO: Check if referenced comments exist

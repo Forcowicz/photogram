@@ -6,17 +6,21 @@ const postSchema = new mongoose.Schema(
       type: [String],
       required: [true, "Your post must contain an image!"]
     },
-    authorId: {
+    author: {
       type: mongoose.Schema.ObjectId,
       ref: "User"
     },
     description: {
       type: String,
-      maxlength: [280, "Post description is too long!"]
+      maxlength: [2048, "Post description is too long!"]
     },
     archived: {
       type: Boolean,
       default: false
+    },
+    comments: {
+      type: [mongoose.Schema.ObjectId],
+      ref: "Comment"
     },
     likes: {
       type: [mongoose.Schema.ObjectId],
@@ -44,6 +48,10 @@ postSchema.virtual("likeCount").get(function () {
 
 postSchema.virtual("taggedCount").get(function () {
   return this.tagged?.length || 0;
+});
+
+postSchema.virtual("commentCount").get(function () {
+  return this.comments?.length || 0;
 });
 
 const Post = new mongoose.model("Post", postSchema);

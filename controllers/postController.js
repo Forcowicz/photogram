@@ -65,6 +65,45 @@ exports.dislikePost = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.addComment = catchAsync(async (req, res, next) => {
+  const postId = req.params.id;
+
+  const post = await Post.findById(postId);
+
+  if (!post) return next(new AppError(404, "Post has not been found."));
+
+  const commentData = {
+    authorId: req.user._id,
+    postId,
+    // type: "regular",
+    content: req.body.content
+  };
+
+  const comment = await Comment.create(commentData);
+
+  post.comments.push(comment._id);
+  await post.save({ validateBeforeSave: false });
+
+  res.status(201).json({
+    status: "success",
+    data: {
+      comment
+    }
+  });
+});
+
+exports.removeComment = catchAsync(async (req, res, next) => {
+  const postId = req.params.postId;
+  const commentId = req.params.commentId;
+
+  await Post.findByIdAndUpdate(postId, { $pull: { comments: commentId } });
+
+  res.status(204).json({
+    status: "success",
+    message: "Comment deleted."
+  });
+});
+
 exports.tagUsers = catchAsync(async (req, res, next) => {
   const postId = req.params.id;
   const usersToTag = req.body.users;
@@ -129,7 +168,7 @@ exports.getComments = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getAll = handlerFactory.getAll(Post, { populate: { path: "authorId" }, searchField: "name" });
+exports.getAll = handlerFactory.getAll(Post, { populate: { path: "author comments" }, searchField: "name" });
 exports.getOne = handlerFactory.getOne(Post);
 exports.createOne = handlerFactory.createOne(Post, {
   allowedFields: ["description", "imageUrl", "tagged"],

@@ -38,6 +38,8 @@
     height: 100%;
 
     object-fit: cover;
+    border-top: 1px solid $c-grey-xlight;
+    border-bottom: 1px solid $c-grey-xlight;
   }
 
   &__actions {
